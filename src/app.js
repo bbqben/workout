@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ajax } from 'jquery';
-import Exercise from './components/exercise';
+import Exercise from './components/Exercise';
 
 const APIURL = 'https://wger.de/api/v2/exercise/';
 const NUMWORKOUTS = 4;
@@ -13,11 +13,40 @@ class App extends React.Component {
 			typeOfWorkout: 7,
 			showWorkoutForm: true,
 			workoutList: [],
-			currentWorkoutList: []
+			currentWorkoutList: [{
+				description: ""
+			}],
+			interval: 0,
+			showWorkoutDisplay: false
 		}
 		this.handleChange = this.handleChange.bind(this);
 		this.getWorkout = this.getWorkout.bind(this);
 		this.workoutPicker = this.workoutPicker.bind(this);
+		this.displayCurrentWorkout = this.displayCurrentWorkout.bind(this);
+		this.startWorkout = this.startWorkout.bind(this);
+	}
+	startWorkout() {
+		console.log(this.state.currentWorkoutList.length);
+		this.setState({
+			showWorkoutDisplay: true
+		})
+		let intervalID = setInterval(() => {
+			this.setState({
+				interval: this.state.interval += 1
+			});
+			console.log(this.state.interval)
+
+			if (this.state.interval === (this.state.currentWorkoutList.length - 1)) {
+				clearInterval(intervalID);
+
+
+				setTimeout(() => {
+					console.log('FINISHED!!');
+
+				}, 2000)
+			}
+		}, 2000);
+
 	}
 
 	componentDidMount() {
@@ -41,12 +70,18 @@ class App extends React.Component {
 							<button>Submit!</button>
 						</form>
 						<div className="workoutDisplay">
-							<h2>Workout List:</h2>
-							<ul>
-								{this.state.currentWorkoutList.map((workout) => {
-									return <Exercise data={workout} />
-								})}
-							</ul>
+							<div className="allWorkouts">
+								<h2>Workout List:</h2>
+								<ul>
+									{this.state.currentWorkoutList.map((workout) => {
+										return <Exercise data={workout} />
+									})}
+								</ul>
+							</div>
+							<button onClick={this.startWorkout}>Start</button>
+							<div className="currentWorkout">
+								{this.displayCurrentWorkout()}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -80,7 +115,7 @@ class App extends React.Component {
 			})
 
 			this.workoutPicker();
-			this.showWorkout();
+			// this.showWorkout();
 
 		}) // End of ajax call -> then 
 	}
@@ -98,6 +133,10 @@ class App extends React.Component {
 			pickedWorkout.description = pickedWorkout.description.replace(/(<p>)/gi, '');
 			pickedWorkout.description = pickedWorkout.description.replace(/(<\/strong>)/gi, '');
 			pickedWorkout.description = pickedWorkout.description.replace(/(<strong>)/gi, '');
+			pickedWorkout.description = pickedWorkout.description.replace(/(<\/ol>)/gi, '');
+			pickedWorkout.description = pickedWorkout.description.replace(/(<ol>)/gi, '');
+			pickedWorkout.description = pickedWorkout.description.replace(/(<\/li>)/gi, '');
+			pickedWorkout.description = pickedWorkout.description.replace(/(<li>)/gi, '');
 
 			listOfChosenWorkouts.push(pickedWorkout);
 			listOfAvailableWorkouts.splice(randomWorkout,1);
@@ -110,8 +149,20 @@ class App extends React.Component {
 
 	}
 
+	displayCurrentWorkout() {
 
-
+		//run a map of the list of workouts
+		//set a timer for 10 seconds each
+		//display the next one
+		if(this.state.showWorkoutDisplay === true) {
+			return (
+				<div>
+					<p>{this.state.currentWorkoutList[this.state.interval].name}</p>
+					<p>{this.state.currentWorkoutList[this.state.interval].description}</p>
+				</div>
+			)
+		}
+	}
 
 
 } // End of class App
