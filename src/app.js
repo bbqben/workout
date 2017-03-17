@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ajax } from 'jquery';
+import Exercise from './components/exercise';
 
-const APIURL = 'https://wger.de/api/v2/exercise/'
+const APIURL = 'https://wger.de/api/v2/exercise/';
+const NUMWORKOUTS = 4;
 
 class App extends React.Component {
 	constructor() {
@@ -10,12 +12,11 @@ class App extends React.Component {
 		this.state = {
 			typeOfWorkout: 7,
 			showWorkoutForm: true,
-			listOfWorkouts: [],
-			currentWorkout: []
+			workoutList: [],
+			currentWorkoutList: []
 		}
 		this.handleChange = this.handleChange.bind(this);
 		this.getWorkout = this.getWorkout.bind(this);
-		this.displayWorkout = this.displayWorkout.bind(this);
 		this.workoutPicker = this.workoutPicker.bind(this);
 	}
 
@@ -40,7 +41,12 @@ class App extends React.Component {
 							<button>Submit!</button>
 						</form>
 						<div className="workoutDisplay">
-							{this.displayWorkout}
+							<h2>Workout List:</h2>
+							<ul>
+								{this.state.currentWorkoutList.map((workout) => {
+									return <Exercise data={workout} />
+								})}
+							</ul>
 						</div>
 					</div>
 				</div>
@@ -68,29 +74,39 @@ class App extends React.Component {
 			}
 		})
 		.then((data) => {
-			//Once data is received, store the data in the 'listOfWorkouts' state
+			//Once data is received, store the data in the 'workoutList' state
 			this.setState({
-				listOfWorkouts: data.results
+				workoutList: data.results
 			})
-			
+
 			this.workoutPicker();
+			this.showWorkout();
 
 		}) // End of ajax call -> then 
 	}
 
-	displayWorkout() {
-		return(
-			this.state.currentWorkout === []
-		)
-	}
-
 	workoutPicker() {
-		let chosenWorkout = Math.floor(Math.random()*this.state.listOfWorkouts.length); // Randomly picking a workout from the available list
-		let currentWorkout = 0;
-		currentWorkout = this.state.listOfWorkouts[chosenWorkout];
+
+		let listOfAvailableWorkouts = this.state.workoutList;
+		let listOfChosenWorkouts = [];
+
+		for(let i = 0; i < NUMWORKOUTS; i++) {
+			let randomWorkout = Math.floor(Math.random()*listOfAvailableWorkouts.length); // Picks a random workout
+			let pickedWorkout = listOfAvailableWorkouts[randomWorkout];
+
+			pickedWorkout.description = pickedWorkout.description.replace(/(<\/p>)/gi, '');
+			pickedWorkout.description = pickedWorkout.description.replace(/(<p>)/gi, '');
+			pickedWorkout.description = pickedWorkout.description.replace(/(<\/strong>)/gi, '');
+			pickedWorkout.description = pickedWorkout.description.replace(/(<strong>)/gi, '');
+
+			listOfChosenWorkouts.push(pickedWorkout);
+			listOfAvailableWorkouts.splice(randomWorkout,1);
+		} // end of for loop
+
 		this.setState({
-			currentWorkout: currentWorkout
-		});
+			currentWorkoutList: listOfChosenWorkouts
+		})
+		console.log(this.state.currentWorkoutList)
 
 	}
 
