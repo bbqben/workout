@@ -17,7 +17,8 @@ class App extends React.Component {
 				description: ""
 			}],
 			interval: 0,
-			showWorkoutDisplay: false
+			showWorkoutDisplay: false,
+			isWorkoutFinished: false
 		}
 		this.handleChange = this.handleChange.bind(this);
 		this.getWorkout = this.getWorkout.bind(this);
@@ -41,7 +42,9 @@ class App extends React.Component {
 
 
 				setTimeout(() => {
-					console.log('FINISHED!!');
+					this.setState({
+						isWorkoutFinished: true
+					})
 
 				}, 2000)
 			}
