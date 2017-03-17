@@ -9,6 +9,8 @@ const notify = require('gulp-notify');
 const plumber = require('gulp-plumber');
 const sass = require("gulp-sass");
 const concat = require("gulp-concat");
+const autoprefixer = require('gulp-autoprefixer');
+
 
 gulp.task("styles", () => {
     return gulp.src("./src/styles/**/*.scss")
@@ -46,6 +48,12 @@ gulp.task('bs', () => {
 
 gulp.task('default', ['js','bs'], () => {
     gulp.watch('src/**/*.scss', ['styles']);
+    gulp.src('./public/styles/style.css')
+        .pipe(autoprefixer({
+            browsers: ['last 2 versions'],
+            cascade: false
+        }))
+        .pipe(gulp.dest('dist'));
     gulp.watch('src/**/*.js',['js']);
     gulp.watch('./public/style.css',reload);
 });
