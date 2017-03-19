@@ -5,6 +5,7 @@ import Exercise from './components/Exercise';
 
 const APIURL = 'https://wger.de/api/v2/exercise/';
 const NUMWORKOUTS = 4;
+const DURATION = 2000; // Duration of the intervals are set to 2 seconds
 
 class App extends React.Component {
 	constructor() {
@@ -25,7 +26,10 @@ class App extends React.Component {
 		this.workoutPicker = this.workoutPicker.bind(this);
 		this.displayCurrentWorkout = this.displayCurrentWorkout.bind(this);
 		this.startWorkout = this.startWorkout.bind(this);
+		this.displayWorkoutForm = this.displayWorkoutForm.bind(this);
 	}
+
+
 	startWorkout() {
 		console.log(this.state.currentWorkoutList.length);
 		this.setState({
@@ -35,26 +39,29 @@ class App extends React.Component {
 			this.setState({
 				interval: this.state.interval += 1
 			});
+
 			console.log(this.state.interval)
 
 			if (this.state.interval === (this.state.currentWorkoutList.length - 1)) {
 				clearInterval(intervalID);
 
-
 				setTimeout(() => {
+					console.log('Workout is finished!!');
 					this.setState({
 						isWorkoutFinished: true
 					})
+				}, DURATION)
 
-				}, 2000)
 			}
-		}, 2000);
+		}, DURATION); // End of setInterval
 
-	}
+	} // End of startWorkout()
 
 	componentDidMount() {
 
 	}
+
+
 	render() {
 		return (
 			<div>
@@ -63,29 +70,18 @@ class App extends React.Component {
 				</header>
 
 				<div className='workoutOutput'>
-					<div className='workoutFormContainer'>
-						<form onSubmit={this.getWorkout}className='workoutForm'>
-							<label htmlFor="typeOfWorkout">Please select the type of workout: </label>
-							<select name="typeOfWorkout" id="typeOfWorkout" onChange={this.handleChange}> {/*This is handling the type of workout to be set*/}
-								<option value="7">Body Weight</option> {/*Value 7 represents body weight on the API*/}
-								<option value="3">Dumbbell</option> {/*Value 3 represents body weight on the API*/}
-							</select>
-							<button>Submit!</button>
-						</form>
-						<div className="workoutDisplay">
-							<div className="allWorkouts">
-								<h2>Workout List:</h2>
-								<ul>
-									{this.state.currentWorkoutList.map((workout) => {
-										return <Exercise data={workout} />
-									})}
-								</ul>
-							</div>
-							<button onClick={this.startWorkout}>Start</button>
-							<div className="currentWorkout">
-								{this.displayCurrentWorkout()}
-							</div>
+					{this.displayWorkoutForm()}
+					<div className="workoutDisplay">
+						<div className="allWorkouts">
+							<h2>Workout List:</h2>
+							<ul>
+								{this.state.currentWorkoutList.map((workout) => {
+									return <Exercise data={workout} />
+								})}
+							</ul>
 						</div>
+						<button onClick={this.startWorkout}>Start</button>
+						{this.displayCurrentWorkout()}
 					</div>
 				</div>
 
@@ -101,6 +97,9 @@ class App extends React.Component {
 
 	getWorkout(e) {
 		e.preventDefault();
+		this.setState({
+			showWorkoutForm: false
+		})
 		//AJAX call is performed
 		ajax({
 			url: APIURL,
@@ -157,13 +156,39 @@ class App extends React.Component {
 		//run a map of the list of workouts
 		//set a timer for 10 seconds each
 		//display the next one
-		if(this.state.showWorkoutDisplay === true) {
+		if(this.state.isWorkoutFinished === false) {
 			return (
-				<div>
+				<div className="currentWorkout">
 					<p>{this.state.currentWorkoutList[this.state.interval].name}</p>
 					<p>{this.state.currentWorkoutList[this.state.interval].description}</p>
 				</div>
 			)
+		} else {
+			//workout is finished so return
+			return(
+				<div className="isWorkoutFinished">
+					<h3>FINISHED!!!</h3>
+				</div>
+			)
+		}
+	}
+
+	displayWorkoutForm() {
+		if(this.state.showWorkoutForm === true) {
+			return(
+				<div className='workoutFormContainer'>
+					<form onSubmit={this.getWorkout}className='workoutForm'>
+						<label htmlFor="typeOfWorkout">Please select the type of workout: </label>
+						<select name="typeOfWorkout" id="typeOfWorkout" onChange={this.handleChange}> {/*This is handling the type of workout to be set*/}
+							<option value="7">Body Weight</option> {/*Value 7 represents body weight on the API*/}
+							<option value="3">Dumbbell</option> {/*Value 3 represents body weight on the API*/}
+						</select>
+						<button>Submit!</button>
+					</form>
+				</div>
+			)
+		} else {
+			return null;
 		}
 	}
 
