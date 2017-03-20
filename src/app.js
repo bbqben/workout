@@ -5,7 +5,7 @@ import Exercise from './components/Exercise';
 
 const APIURL = 'https://wger.de/api/v2/exercise/';
 const NUMWORKOUTS = 4;
-const DURATION = 2000; // Duration of the intervals are set to 2 seconds
+const DURATION = 4000; // Duration of the intervals are set to 2 seconds
 
 class App extends React.Component {
 	constructor() {
@@ -19,7 +19,9 @@ class App extends React.Component {
 			}],
 			interval: 0,
 			showWorkoutDisplay: false,
-			isWorkoutFinished: false
+			isWorkoutFinished: false,
+			timer: 0, 
+			rest: 5
 		}
 		this.handleChange = this.handleChange.bind(this);
 		this.getWorkout = this.getWorkout.bind(this);
@@ -31,29 +33,88 @@ class App extends React.Component {
 
 
 	startWorkout() {
-		console.log(this.state.currentWorkoutList.length);
+		// console.log(this.state.currentWorkoutList.length);
 		this.setState({
 			showWorkoutDisplay: true
 		})
+
 		let intervalID = setInterval(() => {
+
+			console.log(this.state.timer + ' seconds');
+
+			if (this.state.timer > 5 && this.state.rest < 1) {
+				this.setState({
+					interval: this.state.interval += 1,
+					timer: 0,
+					rest: 5
+				})
+			} else if (this.state.timer >= 5) {
+				console.log('RESTING ' + this.state.rest)
+
+				this.setState({
+					rest: this.state.rest -= 1
+				})
+			}
+
+			
+			if (this.state.timer >= 5 && this.state.interval === 2) {
+				clearInterval(intervalID);
+				console.log('finished');
+			}
+
 			this.setState({
+				timer: this.state.timer += 1
+			})
+
+		}, 1000)
+
+// have 10 seconds of workout, then rest counter counts down from 5 seconds to 0
+// when rest === 0 then reset it to 5 and continue with the counter again from 0 
+
+/*		let intervalID = setInterval(() => {
+			this.setState({
+				timer: this.state.timer += 1
+			})
+			
+			console.log(this.state.timer + ' seconds');
+
+			if (this.state.timer > 3 && this.state.timer <= 5) {
+				console.log('REST FOR 3 SECONDS');
+			}
+
+			
+			if (this.state.timer >= 5 && this.state.interval === 2) {
+				clearInterval(intervalID);
+				console.log('finished');
+			} else if (this.state.timer >= 5) {
+				this.setState({
+					timer: 0,
+					interval: this.state.interval += 1
+				})
+				console.log(this.state.interval + ' intervals');
+			}
+
+		}, 1000)*/
+
+
+/*		let intervalID = setInterval(() => { // interval starts
+			this.setState({ // Whenever the interval is run, the state is updated
 				interval: this.state.interval += 1
 			});
 
-			console.log(this.state.interval)
+			console.log(this.state.interval) // console logs the state to know which interval you're in
 
-			if (this.state.interval === (this.state.currentWorkoutList.length - 1)) {
-				clearInterval(intervalID);
+			if (this.state.interval === (this.state.currentWorkoutList.length - 1)) { // checks the interval to see if it's finished
+				clearInterval(intervalID);	 // when the interval is finished this will clear the interval and stop it from continuing
 
-				setTimeout(() => {
+				setTimeout(() => { // Ignore this section Talia because I needed it to run just a bit longer, you probably don't need this
 					console.log('Workout is finished!!');
 					this.setState({
 						isWorkoutFinished: true
 					})
 				}, DURATION)
-
 			}
-		}, DURATION); // End of setInterval
+		}, DURATION); // End of setInterval*/
 
 	} // End of startWorkout()
 
@@ -66,23 +127,25 @@ class App extends React.Component {
 		return (
 			<div>
 				<header>
-					<h1>Workout Application</h1>
+					<h1>4 Minute <img src="../public/assets/noun_637461_cc.svg" alt=""/> Workout</h1>
 				</header>
 
-				<div className='workoutOutput'>
-					{this.displayWorkoutForm()}
-					<div className="workoutDisplay">
-						<div className="allWorkouts">
-							<h2>Workout List:</h2>
-							<ul>
-								{this.state.currentWorkoutList.map((workout) => {
-									return <Exercise data={workout} />
-								})}
-							</ul>
-						</div>
-						<button onClick={this.startWorkout}>Start</button>
-						{this.displayCurrentWorkout()}
-					</div>
+				<div className="wrapper">
+					<div className='workoutOutput'>
+						{this.displayWorkoutForm()}
+						<div className="workoutDisplay">
+							<div className="allWorkouts">
+								<h2>Workout List:</h2>
+								<ol>
+									{this.state.currentWorkoutList.map((workout) => {
+										return <Exercise data={workout} />
+									})}
+								</ol>
+							</div> {/* allWorkouts */}
+							<button onClick={this.startWorkout}>Start</button>
+							{/*{this.displayCurrentWorkout()*/}
+						</div> {/* workoutDisplay */}
+					</div> {/* workoutOutput */}
 				</div>
 
 			</div>
@@ -178,11 +241,13 @@ class App extends React.Component {
 			return(
 				<div className='workoutFormContainer'>
 					<form onSubmit={this.getWorkout}className='workoutForm'>
-						<label htmlFor="typeOfWorkout">Please select the type of workout: </label>
-						<select name="typeOfWorkout" id="typeOfWorkout" onChange={this.handleChange}> {/*This is handling the type of workout to be set*/}
-							<option value="7">Body Weight</option> {/*Value 7 represents body weight on the API*/}
-							<option value="3">Dumbbell</option> {/*Value 3 represents body weight on the API*/}
-						</select>
+						<div className="workoutForm__question1">
+							<label htmlFor="typeOfWorkout">Please select the type of workout: </label>
+							<select name="typeOfWorkout" id="typeOfWorkout" onChange={this.handleChange}> {/*This is handling the type of workout to be set*/}
+								<option value="7">Assorted Body Weight Exercises</option> {/*Value 7 represents body weight on the API*/}
+								<option value="3">Assorted Dumbbell Exercises</option> {/*Value 3 represents body weight on the API*/}
+							</select>
+						</div>
 						<button>Submit!</button>
 					</form>
 				</div>
