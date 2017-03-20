@@ -5,7 +5,8 @@ import Exercise from './components/Exercise';
 
 const APIURL = 'https://wger.de/api/v2/exercise/';
 const NUMWORKOUTS = 4;
-const DURATION = 4000; // Duration of the intervals are set to 2 seconds
+const WORKOUTDURATION = 10; // Duration of each workout in seconds
+const RESTDURATION = 5; // Duration of each rest period in seconds
 
 class App extends React.Component {
 	constructor() {
@@ -20,8 +21,9 @@ class App extends React.Component {
 			interval: 0,
 			showWorkoutDisplay: false,
 			isWorkoutFinished: false,
-			timer: 0, 
-			rest: 5
+			timer: 1, 
+			rest: RESTDURATION,
+			isResting: false
 		}
 		this.handleChange = this.handleChange.bind(this);
 		this.getWorkout = this.getWorkout.bind(this);
@@ -33,33 +35,39 @@ class App extends React.Component {
 
 
 	startWorkout() {
-		// console.log(this.state.currentWorkoutList.length);
 		this.setState({
 			showWorkoutDisplay: true
 		})
 
-		let intervalID = setInterval(() => {
+		let intervalID = setInterval(() => { // starts an interval counter for each second and stored in timer
 
-			console.log(this.state.timer + ' seconds');
+			console.log(this.state.timer + ' seconds', this.state.isResting);
 
-			if (this.state.timer > 5 && this.state.rest < 1) {
-				this.setState({
-					interval: this.state.interval += 1,
+			if (this.state.timer > WORKOUTDURATION && this.state.rest <= 1) { // if the timer is greater than the workout DURATION and if resting period is done
+				this.setState({ // Update the states so that the workout is continued for the next exercise set
+					isResting: false,
+					interval: this.state.interval += 1, 
 					timer: 0,
-					rest: 5
+					rest: RESTDURATION // Resting time in seconds
 				})
-			} else if (this.state.timer >= 5) {
-				console.log('RESTING ' + this.state.rest)
-
+			} else if (this.state.timer >= WORKOUTDURATION) {
 				this.setState({
 					rest: this.state.rest -= 1
 				})
+				this.setState({
+					isResting: true
+				})
+				console.log('RESTING ' + this.state.rest)
+
 			}
 
 			
-			if (this.state.timer >= 5 && this.state.interval === 2) {
+			if (this.state.timer >= WORKOUTDURATION && this.state.interval === 3) {
 				clearInterval(intervalID);
 				console.log('finished');
+				this.setState({
+					isWorkoutFinished: true
+				})
 			}
 
 			this.setState({
@@ -68,53 +76,6 @@ class App extends React.Component {
 
 		}, 1000)
 
-// have 10 seconds of workout, then rest counter counts down from 5 seconds to 0
-// when rest === 0 then reset it to 5 and continue with the counter again from 0 
-
-/*		let intervalID = setInterval(() => {
-			this.setState({
-				timer: this.state.timer += 1
-			})
-			
-			console.log(this.state.timer + ' seconds');
-
-			if (this.state.timer > 3 && this.state.timer <= 5) {
-				console.log('REST FOR 3 SECONDS');
-			}
-
-			
-			if (this.state.timer >= 5 && this.state.interval === 2) {
-				clearInterval(intervalID);
-				console.log('finished');
-			} else if (this.state.timer >= 5) {
-				this.setState({
-					timer: 0,
-					interval: this.state.interval += 1
-				})
-				console.log(this.state.interval + ' intervals');
-			}
-
-		}, 1000)*/
-
-
-/*		let intervalID = setInterval(() => { // interval starts
-			this.setState({ // Whenever the interval is run, the state is updated
-				interval: this.state.interval += 1
-			});
-
-			console.log(this.state.interval) // console logs the state to know which interval you're in
-
-			if (this.state.interval === (this.state.currentWorkoutList.length - 1)) { // checks the interval to see if it's finished
-				clearInterval(intervalID);	 // when the interval is finished this will clear the interval and stop it from continuing
-
-				setTimeout(() => { // Ignore this section Talia because I needed it to run just a bit longer, you probably don't need this
-					console.log('Workout is finished!!');
-					this.setState({
-						isWorkoutFinished: true
-					})
-				}, DURATION)
-			}
-		}, DURATION); // End of setInterval*/
 
 	} // End of startWorkout()
 
@@ -143,7 +104,7 @@ class App extends React.Component {
 								</ol>
 							</div> {/* allWorkouts */}
 							<button onClick={this.startWorkout}>Start</button>
-							{/*{this.displayCurrentWorkout()*/}
+							{this.displayCurrentWorkout()}
 						</div> {/* workoutDisplay */}
 					</div> {/* workoutOutput */}
 				</div>
@@ -219,18 +180,26 @@ class App extends React.Component {
 		//run a map of the list of workouts
 		//set a timer for 10 seconds each
 		//display the next one
-		if(this.state.isWorkoutFinished === false) {
+		if (this.state.isWorkoutFinished === true) {
+			// return workout is done
 			return (
-				<div className="currentWorkout">
-					<p>{this.state.currentWorkoutList[this.state.interval].name}</p>
-					<p>{this.state.currentWorkoutList[this.state.interval].description}</p>
+				<div className="isWorkoutFinished">
+					<h3>FINISHED!!!</h3>
+				</div>
+			)
+		} else if (this.state.isResting === true) {
+			// Display resting countdown
+			return(
+				<div className="restCountdown">
+					<h2>{this.state.rest}</h2>
+					<p>RESTING PERIOD</p>
 				</div>
 			)
 		} else {
-			//workout is finished so return
-			return(
-				<div className="isWorkoutFinished">
-					<h3>FINISHED!!!</h3>
+			return (
+				<div className="currentWorkout">
+					<h2>{this.state.timer}</h2>
+					<p>{this.state.currentWorkoutList[this.state.interval].name}</p>
 				</div>
 			)
 		}
