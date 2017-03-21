@@ -1,7 +1,7 @@
 import React from 'react';
 
 
-export default class CurrentWorkout {
+export default class extends CurrentWorkout {
 
 
 
