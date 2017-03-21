@@ -135,47 +135,86 @@ legend, button::-moz-focus-inner, input::-moz-focus-inner {
 html {
   font-size: 62.5%; }
 
-h1 {
-  font-size: 6rem;
+h1, h2, h3, h4 {
   margin: 0; }
 
-header {
-  text-align: center;
-  background: papayawhip; }
-  header img {
-    position: relative;
-    height: 100px;
-    top: 20px; }
+h1 {
+  font-size: 10rem;
+  display: inline-block;
+  color: #9ae6ec; }
 
 body {
-  background: linear-gradient(rgba(0, 0, 0, 0.1), white), url("../../public/assets/hero.jpg");
+  height: 100vh;
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../../public/assets/hero.jpg");
   background-size: cover;
   background-position: bottom center;
-  background-repeat: no-repeat;
-  -height: 100vh; }
+  background-attachment: fixed;
+  background-repeat: no-repeat; }
 
 .wrapper {
   max-width: 70%;
-  margin: 0 auto;
-  background: red; }
+  margin: 0 auto; }
 
-.workoutFormContainer .workoutForm .workoutForm__question1 {
-  display: flex;
-  flex-direction: column;
-  text-align: center; }
-  .workoutFormContainer .workoutForm .workoutForm__question1 label {
-    font-size: 3rem; }
-  .workoutFormContainer .workoutForm .workoutForm__question1 select {
-    font-size: 3rem;
-    max-width: 50%;
-    margin: 0 auto; }
+.workoutFormContainer {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)); }
+  .workoutFormContainer .workoutFormContainerWrapper {
+    max-width: 70%;
+    margin: 0 auto;
+    color: white;
+    padding: 300px 0;
+    text-align: left;
+    height: 100vh; }
+    .workoutFormContainer .workoutFormContainerWrapper img {
+      position: relative;
+      height: 100px;
+      left: -470px;
+      top: -50px;
+      color: white;
+      fill: white; }
+    .workoutFormContainer .workoutFormContainerWrapper p {
+      font-size: 1.6rem;
+      line-height: 2.8rem; }
+  .workoutFormContainer .workoutForm {
+    margin-top: 70px; }
+    .workoutFormContainer .workoutForm .workoutForm__question1 {
+      display: flex;
+      flex-direction: column;
+      text-align: center; }
+      .workoutFormContainer .workoutForm .workoutForm__question1 label {
+        font-size: 3rem;
+        margin-bottom: 20px; }
+      .workoutFormContainer .workoutForm .workoutForm__question1 select {
+        font-size: 3rem;
+        max-width: 60%;
+        margin: 0 auto; }
+    .workoutFormContainer .workoutForm button {
+      font-size: 3rem;
+      margin: 0 auto;
+      display: block; }
 
-.workoutFormContainer .workoutForm button {
-  font-size: 3rem;
-  margin: 0 auto;
-  display: block; }
-
-.workoutDisplay .allWorkouts {
-  font-size: 2.5rem; }
-  .workoutDisplay .allWorkouts ul {
-    list-style: numerical; }
+.workoutDisplay .listOfWorkout {
+  background: rgba(0, 0, 0, 0.6); }
+  .workoutDisplay .listOfWorkout .listOfWorkoutContainer {
+    color: white;
+    font-size: 2.5rem;
+    max-width: 80%;
+    margin: 0 auto;
+    padding: 50px 0; }
+    .workoutDisplay .listOfWorkout .listOfWorkoutContainer h2 {
+      font-size: 7rem;
+      color: #9ae6ec; }
+    .workoutDisplay .listOfWorkout .listOfWorkoutContainer ol {
+      list-style: numerical; }
+      .workoutDisplay .listOfWorkout .listOfWorkoutContainer ol li {
+        margin-bottom: 40px; }
+        .workoutDisplay .listOfWorkout .listOfWorkoutContainer ol li .exerciseTitle {
+          margin: 0;
+          font-size: 2.4rem;
+          font-weight: 900;
+          padding-bottom: 5px; }
+        .workoutDisplay .listOfWorkout .listOfWorkoutContainer ol li .exerciseDescription {
+          margin: 0;
+          font-size: 1.8rem;
+          line-height: 2.6rem; }
+    .workoutDisplay .listOfWorkout .listOfWorkoutContainer button {
+      padding: 15px; }

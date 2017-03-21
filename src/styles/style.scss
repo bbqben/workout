@@ -1,56 +1,85 @@
 @import 'partials/setup.scss';
 
 
-
-
-
-h1 {
-	font-size: 6rem;
+h1, h2, h3, h4 {
 	margin: 0;
 }
+
+h1 {
+	font-size: 10rem;
+	// position: relative;
+	display: inline-block;
+	// left: 55px;
+	color: #9ae6ec;
+}
+
 
 
 
 
 header {
-	text-align: center;
-	background: papayawhip;
-	img {
-		position: relative;
-		height: 100px;
-		top: 20px
-	}
+	// text-align: center;
+	// background: white;
+}
+
+
+section {
+
 }
 
 
 
 body {
-	background: linear-gradient(rgba(0,0,0,.10),rgba(255,255,255,1)),url('../../public/assets/hero.jpg');
+	height: 100vh;
+	background: linear-gradient(rgba(0,0,0,.2),rgba(0,0,0,.2)),url('../../public/assets/hero.jpg');
 	background-size: cover;
 	background-position: bottom center;
+	background-attachment: fixed;
 	background-repeat: no-repeat;
-	-height: 100vh;
 }
 
 
 .wrapper {
 	max-width: 70%;
 	margin: 0 auto;
-	background: red;
+	// background: red;
 }
 
 .workoutFormContainer {
+	background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6));
+	.workoutFormContainerWrapper {
+		max-width: 70%;
+		margin: 0 auto;
+		color: white;
+		padding: 300px 0;
+		text-align: left;
+		height: 100vh;
+		img {
+			position: relative;
+			height: 100px;
+			left: -470px;
+			top: -50px;
+			color: white;
+			fill: white;
+		}
+		p {
+			font-size: 1.6rem;
+			line-height: 2.8rem;
+		}
+	}
 	.workoutForm {
+		margin-top: 70px;
 		.workoutForm__question1 {
 			display: flex;
 			flex-direction: column;
 			text-align: center;
 			label {
 				font-size: 3rem;
+				margin-bottom: 20px;
 			}
 			select {
 				font-size: 3rem;
-				max-width: 50%;
+				max-width: 60%;
 				margin: 0 auto;
 			}
 		}	
@@ -64,8 +93,38 @@ body {
 
 
 .workoutDisplay {
-	.allWorkouts {
-		font-size: 2.5rem;
-		ul {list-style: numerical;}
-	}
-}
+	.listOfWorkout {
+		background: rgba(0,0,0,0.6);
+		.listOfWorkoutContainer {
+			color: white;
+			font-size: 2.5rem;
+			max-width: 80%;
+			margin: 0 auto;
+			padding: 50px 0;
+			h2 {
+				font-size: 7rem;
+				color: #9ae6ec;
+			}
+			ol {
+				list-style: numerical;
+				li {
+					margin-bottom: 40px;
+					.exerciseTitle {
+						margin: 0;
+						font-size: 2.4rem;
+						font-weight: 900;
+						padding-bottom: 5px;
+					}
+					.exerciseDescription {
+						margin: 0;
+						font-size: 1.8rem;
+						line-height: 2.6rem;
+					}
+				} // End of li
+			} // End of ol
+			button {
+				padding: 15px;
+			}
+		} // End of .listOfWorkoutContainer
+	} // End of .listOfWorkout
+}// End of .workoutDisplay

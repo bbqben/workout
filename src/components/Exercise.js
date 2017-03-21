@@ -4,8 +4,8 @@ export default function Exercise(props) {
 	return (
 
 		<li className='exercise'>
-			<p>{props.data.name}</p>
-			<p>{props.data.description}</p>
+			<p className='exerciseTitle'>{props.data.name}</p>
+			<p className='exerciseDescription'>{props.data.description}</p>
 		</li>
 	)
 }

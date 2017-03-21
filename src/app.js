@@ -4,9 +4,18 @@ import { ajax } from 'jquery';
 import Exercise from './components/Exercise';
 
 const APIURL = 'https://wger.de/api/v2/exercise/';
-const NUMWORKOUTS = 4;
-const WORKOUTDURATION = 10; // Duration of each workout in seconds
+const NUMWORKOUTS = 7;
+const WORKOUTDURATION = 30; // Duration of each workout in seconds
 const RESTDURATION = 5; // Duration of each rest period in seconds
+
+
+//AUDIO SECTION
+const audioHalfWay = new Audio('../public/assets/halfway.mp3');
+const audioAlmostDone = new Audio('../public/assets/almostdone.mp3');
+const audioAlert = new Audio('../public/assets/alert_daniel_simon.mp3');
+const audioRest = new Audio('../public/assets/rest.mp3');
+//AUDIO SECTION
+
 
 class App extends React.Component {
 	constructor() {
@@ -39,6 +48,8 @@ class App extends React.Component {
 			showWorkoutDisplay: true
 		})
 
+		audioAlert.play();
+
 		let intervalID = setInterval(() => { // starts an interval counter for each second and stored in timer
 
 			console.log(this.state.timer + ' seconds', this.state.isResting);
@@ -50,7 +61,13 @@ class App extends React.Component {
 					timer: 0,
 					rest: RESTDURATION // Resting time in seconds
 				})
+				audioAlert.play();
 			} else if (this.state.timer >= WORKOUTDURATION) {
+
+				if (this.state.rest === RESTDURATION) {
+					audioRest.play();
+				}
+
 				this.setState({
 					rest: this.state.rest -= 1
 				})
@@ -58,7 +75,12 @@ class App extends React.Component {
 					isResting: true
 				})
 				console.log('RESTING ' + this.state.rest)
+			}
 
+			if (this.state.timer === (WORKOUTDURATION/2 - 1)) {
+				audioHalfWay.play();
+			} else if (this.state.timer === (WORKOUTDURATION * 0.8)) {
+				audioAlmostDone.play();
 			}
 
 			
@@ -87,27 +109,30 @@ class App extends React.Component {
 	render() {
 		return (
 			<div>
-				<header>
-					<h1>4 Minute <img src="../public/assets/noun_637461_cc.svg" alt=""/> Workout</h1>
-				</header>
 
-				<div className="wrapper">
-					<div className='workoutOutput'>
-						{this.displayWorkoutForm()}
-						<div className="workoutDisplay">
-							<div className="allWorkouts">
-								<h2>Workout List:</h2>
-								<ol>
-									{this.state.currentWorkoutList.map((workout) => {
-										return <Exercise data={workout} />
-									})}
-								</ol>
-							</div> {/* allWorkouts */}
-							<button onClick={this.startWorkout}>Start</button>
-							{this.displayCurrentWorkout()}
-						</div> {/* workoutDisplay */}
-					</div> {/* workoutOutput */}
-				</div>
+				<section>
+					<header>
+					</header>
+					<div className="wrapper">
+						<div className='workoutOutput'>
+							{this.displayWorkoutForm()}
+							<div className="workoutDisplay">
+								<div className="listOfWorkout">
+									<div className="listOfWorkoutContainer">
+										<h2>Workout List:</h2>
+										<ol>
+											{this.state.currentWorkoutList.map((workout) => {
+												return <Exercise data={workout} />
+											})}
+										</ol>
+									</div>
+									<button onClick={this.startWorkout}>Ready To Start!</button>
+								</div> {/* listOfWorkout */}
+								{this.displayCurrentWorkout()}
+							</div> {/* workoutDisplay */}
+						</div> {/* workoutOutput */}
+					</div>
+				</section>
 
 			</div>
 		)
@@ -209,16 +234,22 @@ class App extends React.Component {
 		if(this.state.showWorkoutForm === true) {
 			return(
 				<div className='workoutFormContainer'>
-					<form onSubmit={this.getWorkout}className='workoutForm'>
-						<div className="workoutForm__question1">
-							<label htmlFor="typeOfWorkout">Please select the type of workout: </label>
-							<select name="typeOfWorkout" id="typeOfWorkout" onChange={this.handleChange}> {/*This is handling the type of workout to be set*/}
-								<option value="7">Assorted Body Weight Exercises</option> {/*Value 7 represents body weight on the API*/}
-								<option value="3">Assorted Dumbbell Exercises</option> {/*Value 3 represents body weight on the API*/}
-							</select>
-						</div>
-						<button>Submit!</button>
-					</form>
+					<div className="workoutFormContainerWrapper">
+						<h1>Appercise</h1>
+						<img src="../public/assets/stretch.svg" alt="Image of a dumbbell"/>
+						<p>Salutations my friends,  I created this application as I wanted to have a way to be given assorted exercises based on the equipment currently available. To use the application please select a workout regime below. You'll be shown the selection of exercises hand picked for your workout along with instructions on how to perform them. Once you are ready scroll down to the bottom of the page and click on the 'Ready' button to begin your workout! </p>
+						<form onSubmit={this.getWorkout}className='workoutForm'>
+							<div className="workoutForm__question1">
+								<label htmlFor="typeOfWorkout">Please select the type of workout: </label>
+								<select name="typeOfWorkout" id="typeOfWorkout" onChange={this.handleChange}> {/*This is handling the type of workout to be set*/}
+									<option value="" disabled selected>Workout Options:</option>
+									<option value="7">Assorted Body Weight Exercises</option> {/*Value 7 represents body weight on the API*/}
+									<option value="3">Assorted Dumbbell Exercises</option> {/*Value 3 represents body weight on the API*/}
+								</select>
+							</div>
+							<button>Submit!</button>
+						</form>
+					</div>
 				</div>
 			)
 		} else {
