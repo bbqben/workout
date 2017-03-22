@@ -131,6 +131,158 @@ legend, button::-moz-focus-inner, input::-moz-focus-inner {
 html {
   font-size: 62.5%; }
 
+.workoutDisplay {
+  padding: 100px 0; }
+  .workoutDisplay .workoutFinishedContainer {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+    padding: 200px 0; }
+    .workoutDisplay .workoutFinishedContainer .workoutFinished {
+      max-width: 75%;
+      margin: 0 auto; }
+      .workoutDisplay .workoutFinishedContainer .workoutFinished h3 {
+        font-size: 5rem; }
+      .workoutDisplay .workoutFinishedContainer .workoutFinished p {
+        font-size: 1.8rem;
+        color: white;
+        text-align: center; }
+        .workoutDisplay .workoutFinishedContainer .workoutFinished p a, .workoutDisplay .workoutFinishedContainer .workoutFinished p a:visited {
+          text-decoration: underline;
+          color: white; }
+        .workoutDisplay .workoutFinishedContainer .workoutFinished p a:hover {
+          color: #9ae6ec; }
+      .workoutDisplay .workoutFinishedContainer .workoutFinished p:last-of-type {
+        margin-top: 50px; }
+  .workoutDisplay .currentWorkout {
+    text-align: center; }
+    .workoutDisplay .currentWorkout .restCountdown {
+      background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7));
+      padding: 150px 0;
+      height: 100%; }
+      .workoutDisplay .currentWorkout .restCountdown h2 {
+        font-size: 25rem;
+        color: #21458e; }
+      .workoutDisplay .currentWorkout .restCountdown p {
+        font-size: 10rem;
+        color: white;
+        margin: 0;
+        color: #77adbf; }
+    .workoutDisplay .currentWorkout .currentWorkoutContainer {
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7));
+      padding: 150px 0;
+      height: 100%; }
+      .workoutDisplay .currentWorkout .currentWorkoutContainer h2 {
+        font-size: 25rem;
+        color: #9ae6ec; }
+      .workoutDisplay .currentWorkout .currentWorkoutContainer p {
+        font-size: 7rem;
+        color: white;
+        margin-top: 0; }
+  .workoutDisplay .workoutFormContainer {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)); }
+    .workoutDisplay .workoutFormContainer .workoutFormContainerWrapper {
+      max-width: 75%;
+      margin: 0 auto;
+      color: white;
+      padding: 13% 0;
+      text-align: left; }
+      .workoutDisplay .workoutFormContainer .workoutFormContainerWrapper p {
+        font-size: 1.8rem;
+        line-height: 2.8rem; }
+    .workoutDisplay .workoutFormContainer .workoutForm {
+      margin-top: 70px; }
+      .workoutDisplay .workoutFormContainer .workoutForm .workoutForm__question1 {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        text-align: center; }
+        .workoutDisplay .workoutFormContainer .workoutForm .workoutForm__question1 label {
+          font-size: 3rem;
+          margin-bottom: 20px; }
+        .workoutDisplay .workoutFormContainer .workoutForm .workoutForm__question1 select {
+          font-size: 3rem;
+          max-width: 60%;
+          margin: 0 auto; }
+      .workoutDisplay .workoutFormContainer .workoutForm button {
+        font-size: 3rem;
+        margin: 0 auto;
+        display: block; }
+  .workoutDisplay .listOfWorkout {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 25px 0; }
+    .workoutDisplay .listOfWorkout h2 {
+      font-size: 7rem;
+      color: #9ae6ec; }
+    .workoutDisplay .listOfWorkout .listOfWorkoutLoading {
+      margin: 0 auto;
+      padding: 200px; }
+      .workoutDisplay .listOfWorkout .listOfWorkoutLoading img {
+        max-width: 500px;
+        margin: 0 auto;
+        display: block; }
+    .workoutDisplay .listOfWorkout .readyBtn {
+      border: none;
+      outline: none;
+      font-size: 3.5rem;
+      background: #989ed5;
+      margin: 0 auto;
+      display: block;
+      padding: 10px 30px;
+      border-radius: 15px;
+      margin-bottom: 75px;
+      color: white; }
+    .workoutDisplay .listOfWorkout .listOfWorkoutContainer {
+      color: white;
+      font-size: 2.5rem;
+      max-width: 75%;
+      margin: 0 auto;
+      padding: 50px 0; }
+      .workoutDisplay .listOfWorkout .listOfWorkoutContainer ol {
+        list-style: numerical; }
+        .workoutDisplay .listOfWorkout .listOfWorkoutContainer ol li {
+          margin-bottom: 40px; }
+          .workoutDisplay .listOfWorkout .listOfWorkoutContainer ol li .exerciseTitle {
+            margin: 0;
+            font-size: 2.4rem;
+            font-weight: 900;
+            padding-bottom: 5px; }
+          .workoutDisplay .listOfWorkout .listOfWorkoutContainer ol li .exerciseDescription {
+            margin: 0;
+            font-size: 1.8rem;
+            line-height: 2.6rem; }
+
+@media (max-width: 730px) {
+  .workoutDisplay .workoutFinishedContainer .workoutFinished {
+    max-width: 85%; }
+  .workoutDisplay .workoutFormContainer .workoutForm .workoutForm__question1 label {
+    font-size: 2.6rem; } }
+
+@media (max-width: 650px) {
+  .workoutDisplay .workoutFormContainer .workoutFormContainerWrapper {
+    max-width: 85%; }
+  .workoutDisplay .listOfWorkout .listOfWorkoutContainer {
+    max-width: 85%; }
+  .workoutDisplay .workoutFinishedContainer .workoutFinished {
+    max-width: 85%; } }
+
+@media (max-width: 550px) {
+  .workoutDisplay .workoutFormContainer .workoutFormContainerWrapper {
+    padding: 18% 0; }
+  .workoutDisplay .workoutFinishedContainer .workoutFinished {
+    max-width: 95%; }
+  .workoutDisplay .workoutFormContainer .workoutFormContainerWrapper {
+    max-width: 95%; }
+  .workoutDisplay .listOfWorkout .listOfWorkoutContainer {
+    max-width: 95%; } }
+
+@media (max-width: 490px) {
+  .workoutDisplay .listOfWorkout h2 {
+    font-size: 5.8rem; }
+  .workoutDisplay .workoutFinishedContainer .workoutFinished h3 {
+    font-size: 4.5rem; }
+  .workoutDisplay .workoutFinishedContainer .workoutFinished p {
+    font-size: 1.6rem; } }
+
 h1, h2, h3, h4 {
   margin: 0; }
 
@@ -139,7 +291,27 @@ h1 {
   display: inline-block;
   color: #9ae6ec; }
 
-body {
+h3 {
+  font-size: 4rem;
+  color: #9ae6ec;
+  text-align: center; }
+
+.logo {
+  position: relative; }
+  .logo img {
+    position: absolute;
+    height: 100px;
+    left: 15px;
+    top: -60px;
+    color: white;
+    fill: white; }
+
+.twitter {
+  position: absolute;
+  top: 13px;
+  right: 15px; }
+
+body #app {
   height: 100vh;
   background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("../../public/assets/hero.jpg");
   background-size: cover;
@@ -151,68 +323,24 @@ body {
   max-width: 70%;
   margin: 0 auto; }
 
-.workoutFormContainer {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)); }
-  .workoutFormContainer .workoutFormContainerWrapper {
-    max-width: 70%;
-    margin: 0 auto;
-    color: white;
-    padding: 300px 0;
-    text-align: left;
-    height: 100vh; }
-    .workoutFormContainer .workoutFormContainerWrapper img {
-      position: relative;
-      height: 100px;
-      left: -470px;
-      top: -50px;
-      color: white;
-      fill: white; }
-    .workoutFormContainer .workoutFormContainerWrapper p {
-      font-size: 1.6rem;
-      line-height: 2.8rem; }
-  .workoutFormContainer .workoutForm {
-    margin-top: 70px; }
-    .workoutFormContainer .workoutForm .workoutForm__question1 {
-      display: -ms-flexbox;
-      display: flex;
-      -ms-flex-direction: column;
-      flex-direction: column;
-      text-align: center; }
-      .workoutFormContainer .workoutForm .workoutForm__question1 label {
-        font-size: 3rem;
-        margin-bottom: 20px; }
-      .workoutFormContainer .workoutForm .workoutForm__question1 select {
-        font-size: 3rem;
-        max-width: 60%;
-        margin: 0 auto; }
-    .workoutFormContainer .workoutForm button {
-      font-size: 3rem;
-      margin: 0 auto;
-      display: block; }
+@media (max-width: 1100px) {
+  .wrapper {
+    max-width: 80%; } }
 
-.workoutDisplay .listOfWorkout {
-  background: rgba(0, 0, 0, 0.6); }
-  .workoutDisplay .listOfWorkout .listOfWorkoutContainer {
-    color: white;
-    font-size: 2.5rem;
-    max-width: 80%;
-    margin: 0 auto;
-    padding: 50px 0; }
-    .workoutDisplay .listOfWorkout .listOfWorkoutContainer h2 {
-      font-size: 7rem;
-      color: #9ae6ec; }
-    .workoutDisplay .listOfWorkout .listOfWorkoutContainer ol {
-      list-style: numerical; }
-      .workoutDisplay .listOfWorkout .listOfWorkoutContainer ol li {
-        margin-bottom: 40px; }
-        .workoutDisplay .listOfWorkout .listOfWorkoutContainer ol li .exerciseTitle {
-          margin: 0;
-          font-size: 2.4rem;
-          font-weight: 900;
-          padding-bottom: 5px; }
-        .workoutDisplay .listOfWorkout .listOfWorkoutContainer ol li .exerciseDescription {
-          margin: 0;
-          font-size: 1.8rem;
-          line-height: 2.6rem; }
-    .workoutDisplay .listOfWorkout .listOfWorkoutContainer button {
-      padding: 15px; }
+@media (max-width: 900px) {
+  .wrapper {
+    max-width: 85%; } }
+
+@media (max-width: 720px) {
+  .wrapper {
+    max-width: 90%; } }
+
+@media (max-width: 650px) {
+  .wrapper {
+    max-width: 100%; } }
+
+@media (max-width: 540px) {
+  h1 {
+    font-size: 8.4rem; }
+  .logo img {
+    left: 9px; } }

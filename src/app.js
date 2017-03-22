@@ -4,16 +4,16 @@ import { ajax } from 'jquery';
 import Exercise from './components/Exercise';
 
 const APIURL = 'https://wger.de/api/v2/exercise/';
-const NUMWORKOUTS = 2;
-const WORKOUTDURATION = 5; // Duration of each workout in seconds
-const RESTDURATION = 5; // Duration of each rest period in seconds
+const NUMWORKOUTS = 4;
+const WORKOUTDURATION = 60; // Duration of each workout in seconds
+const RESTDURATION = 15; // Duration of each rest period in seconds
 
 
 //AUDIO SECTION
-const audioHalfWay = new Audio('../public/assets/halfway.mp3');
-const audioAlmostDone = new Audio('../public/assets/almostdone.mp3');
-const audioAlert = new Audio('../public/assets/alert_daniel_simon.mp3');
-const audioRest = new Audio('../public/assets/rest.mp3');
+const audioHalfWay = new Audio('./public/assets/halfway.mp3');
+const audioAlmostDone = new Audio('./public/assets/almostdone.mp3');
+const audioAlert = new Audio('./public/assets/alert_daniel_simon.mp3');
+const audioRest = new Audio('./public/assets/rest.mp3');
 //AUDIO SECTION
 
 
@@ -21,7 +21,7 @@ class App extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			typeOfWorkout: 7,
+			typeOfWorkout: 0,
 			showWorkoutForm: true,
 			workoutList: [],
 			currentWorkoutList: [{
@@ -46,17 +46,16 @@ class App extends React.Component {
 	}
 
 
-	startWorkout() {
+	startWorkout() { // Workout interval starts with this function
 		this.setState({
 			showWorkoutDisplay: true,
 			hasWorkoutStarted: true
 		})
 
-		audioAlert.play();
+		audioAlert.play(); // Audio to alert the beginning
 
 		let intervalID = setInterval(() => { // starts an interval counter for each second and stored in timer
 
-			console.log(this.state.timer + ' seconds', `Interval is ${this.state.interval}`, `isResting value: ${this.state.isResting}`);
 
 			if (this.state.timer > WORKOUTDURATION && this.state.rest <= 1) { // if the timer is greater than the workout DURATION and if resting period is done
 				this.setState({ // Update the states so that the workout is continued for the next exercise set
@@ -66,37 +65,33 @@ class App extends React.Component {
 					rest: RESTDURATION // Resting time in seconds
 				})
 				audioAlert.play();
-			} else if (this.state.timer >= WORKOUTDURATION) {
+			} else if (this.state.timer >= WORKOUTDURATION) { // If the timer is greater than the workout duration that means that currently it's a resting period
 
 				if (this.state.timer > WORKOUTDURATION && this.state.isResting === true) {
 					audioRest.play();
 				}
 
-				this.setState({
-					rest: this.state.rest -= 1
-				})
-				this.setState({
+				this.setState({ // decrease the rest timer and indicate that it is currently resting time
+					rest: this.state.rest -= 1,
 					isResting: true
 				})
-				console.log('RESTING ' + this.state.rest)
 			}
 
-			if (this.state.timer === (WORKOUTDURATION/2 - 1)) {
+			if (this.state.timer === (WORKOUTDURATION/2 - 1)) { // Checks to see if the workout has gone through half way, if so indicate with audio
 				audioHalfWay.play();
-			} else if (this.state.timer === (WORKOUTDURATION * 0.8)) {
+			} else if (this.state.timer === (WORKOUTDURATION * 0.8)) { // Checks if workout is almost done, if so indicate with audio
 				audioAlmostDone.play();
 			}
 
 			
-			if (this.state.timer >= WORKOUTDURATION && this.state.interval === NUMWORKOUTS - 1) {
+			if (this.state.timer >= WORKOUTDURATION && this.state.interval === NUMWORKOUTS - 1) { //Checks if the workout is finished by seeing if the timer hit the max and if the interval is on it's last one 
 				clearInterval(intervalID);
-				console.log('finished');
 				this.setState({
 					isWorkoutFinished: true
 				})
 			}
 
-			this.setState({
+			this.setState({ // Increase the timer by 1, which indicates seconds. This is set at the end so that the items above are performed before the timer is started
 				timer: this.state.timer += 1
 			})
 
@@ -105,13 +100,6 @@ class App extends React.Component {
 
 	} // End of startWorkout()
 
-	componentDidMount() {
-
-	}
-
-
-
-
 	displayWorkoutList() {
 		if (this.state.hasWorkoutStarted === false) {
 			if (this.state.isLoading === true) {
@@ -119,7 +107,7 @@ class App extends React.Component {
 				return(
 					<div className="listOfWorkout">
 						<div className="listOfWorkoutLoading">
-							<img src="../public/assets/loading.gif" alt="Image of a crab running to signify loading."/>
+							<img src="./public/assets/loading.gif" alt="loading bar"/>
 							<h3>LOADING</h3>
 						</div>
 					</div>
@@ -133,7 +121,7 @@ class App extends React.Component {
 							<h2>Workout List:</h2>
 							<ol>
 								{this.state.currentWorkoutList.map((workout) => {
-									return <Exercise data={workout} />
+									return <Exercise data={workout} key={`workoutId-${workout.id}`} />
 								})}
 							</ol>
 						</div> {/* listOfWorkoutContainer */}
@@ -169,16 +157,16 @@ class App extends React.Component {
 
 	handleChange(e){
 		this.setState({
-			[e.target.name] :e.target.value,
+			typeOfWorkout: e.target.value,
 			isLoading: true
+		}, () => {
+			this.getWorkout();
 		})
 
-		this.getWorkout();
+
 	}
 
 	getWorkout() {
-
-
 		this.setState({
 			showWorkoutForm: false,
 			isLoading: true
@@ -211,10 +199,12 @@ class App extends React.Component {
 		let listOfAvailableWorkouts = this.state.workoutList;
 		let listOfChosenWorkouts = [];
 
-		for(let i = 0; i < NUMWORKOUTS; i++) {
+		for(let i = 0; i < NUMWORKOUTS; i++) { // Runs a for loop to randomly pick a pre-determined amount of exercises to compile a list
 			let randomWorkout = Math.floor(Math.random()*listOfAvailableWorkouts.length); // Picks a random workout
 			let pickedWorkout = listOfAvailableWorkouts[randomWorkout];
 
+
+			// Regex to remove some tags found from API results
 			pickedWorkout.description = pickedWorkout.description.replace(/(<\/p>)/gi, '');
 			pickedWorkout.description = pickedWorkout.description.replace(/(<p>)/gi, '');
 			pickedWorkout.description = pickedWorkout.description.replace(/(<\/strong>)/gi, '');
@@ -228,30 +218,25 @@ class App extends React.Component {
 			listOfAvailableWorkouts.splice(randomWorkout,1);
 		} // end of for loop
 
-		this.setState({
+		this.setState({ // Updates the states with the chosen list and indicate that loading is completed.
 			currentWorkoutList: listOfChosenWorkouts,
 			isLoading: false
 		})
-		console.log(this.state.currentWorkoutList)
 
 	}
 
 	displayCurrentWorkout() {
-
-		//run a map of the list of workouts
-		//set a timer for 10 seconds each
-		//display the next one
-
-		// if isLoading is true then you want to show a loading screen
-		// if isLoading is true and the workout string is empty then you want to show a loading 
-
-		if (this.state.isLoading === false && this.state.currentWorkoutList.length > 1) {
+		if (this.state.isLoading === false && this.state.currentWorkoutList.length > 1) { // Checks to ensure that it is not loading and workout had more than one item in it
 			if (this.state.isWorkoutFinished === true) {
 				// return workout is done
 				return (
-					<div className="currentWorkout">
-						<div className="isWorkoutFinished">
-							<h3>FINISHED!!!</h3>
+					<div className="workoutFinishedContainer">
+
+						<div className="workoutFinished">
+							<h3>Workout Complete!</h3>
+							<p>Congratulations, you finished the workout!!! You did an excellent job completing the workout! Please tweet about this workout app and share it with your friends if you liked it.</p>
+							<p>If you had any feedback on the app, please feel free to send an email to <a href= "mailto:bbentran@gmail.com">bbentran@gmail.com</a> or tweet me at <a href="https://twitter.com/BenTranCodes">@BenTranCodes</a>
+							</p>
 						</div>
 					</div>
 				)
@@ -261,11 +246,12 @@ class App extends React.Component {
 					<div className="currentWorkout">
 						<div className="restCountdown">
 							<h2>{this.state.rest}</h2>
-							<p>RESTING PERIOD</p>
+							<p>REST</p>
 						</div>
 					</div>
 				)
 			} else if (this.state.hasWorkoutStarted === true && this.state.isWorkoutFinished === false) {
+				// Displays the current exercise and timer
 				return (
 					<div className="currentWorkout">
 						<div className="currentWorkoutContainer">
@@ -280,18 +266,20 @@ class App extends React.Component {
 	} // End of displayCurrentWorkout
 
 	displayWorkoutForm() {
-		if(this.state.showWorkoutForm === true) {
+		if(this.state.showWorkoutForm === true) { // Checks if the form should be displayed
 			return(
 				<div className='workoutFormContainer'>
 					<div className="workoutFormContainerWrapper">
-						<h1>Appercise</h1>
-						<img src="../public/assets/stretch.svg" alt="Image of a dumbbell"/>
-						<p>Salutations friends! I created this application as I wanted to have a way to be given assorted exercises based on the equipment currently available. To use the application please select a workout regime below. You'll be shown the selection of exercises hand picked for your workout along with instructions on how to perform them. Once you are ready scroll down to the bottom of the page and click on the 'Ready' button to begin your workout! </p>
+						<div className="logo">
+							<h1>Appercise</h1>
+							<img src="./public/assets/stretch.svg" alt="Image of a dumbbell"/>
+						</div>
+						<p>Salutations friends! I created this application as I wanted to have a way to be given assorted exercises based on the equipment currently available. To use the application please select a workout regime below. You'll be shown the selection of exercises hand picked for your workout along with instructions on how to perform them. Once you are ready scroll down to the bottom of the page and click on the 'Ready' button and the workout will begin! Note that the exercises are done in 60 second intervals. Additionally I would like to thank Gan Khoon Lay who created the logo taken from the Noun Project.</p>
 						<form className='workoutForm'>
 							<div className="workoutForm__question1">
 								<label htmlFor="typeOfWorkout">Please select the type of workout: </label>
-								<select name="typeOfWorkout" id="typeOfWorkout" onChange={this.handleChange}> {/*This is handling the type of workout to be set*/}
-									<option value="" disabled selected>Workout Options:</option>
+								<select name="typeOfWorkout" id="typeOfWorkout" value={this.state.typeOfWorkout} onChange={this.handleChange}> {/*This is handling the type of workout to be set*/}
+									<option value="0" disabled>Workout Options:</option> {/* Used as a label, which is why it is disabled */}
 									<option value="7">Assorted Body Weight Exercises</option> {/*Value 7 represents body weight on the API*/}
 									<option value="3">Assorted Dumbbell Exercises</option> {/*Value 3 represents body weight on the API*/}
 								</select>
