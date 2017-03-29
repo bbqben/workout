@@ -67,7 +67,7 @@ class App extends React.Component {
 				audioAlert.play();
 			} else if (this.state.timer >= WORKOUTDURATION) { // If the timer is greater than the workout duration that means that currently it's a resting period
 
-				if (this.state.timer > WORKOUTDURATION && this.state.isResting === true) {
+				if (this.state.timer === WORKOUTDURATION) {
 					audioRest.play();
 				}
 
