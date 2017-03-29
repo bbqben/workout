@@ -43,6 +43,13 @@ class App extends React.Component {
 		this.startWorkout = this.startWorkout.bind(this);
 		this.displayWorkoutForm = this.displayWorkoutForm.bind(this);
 		this.displayWorkoutList = this.displayWorkoutList.bind(this);
+		this.calculateRemainingWorkoutTime = this.calculateRemainingWorkoutTime.bind(this);
+	}
+
+	calculateRemainingWorkoutTime() {
+		let remainingTime = WORKOUTDURATION - this.state.timer;
+
+		return remainingTime;
 	}
 
 
@@ -255,7 +262,7 @@ class App extends React.Component {
 				return (
 					<div className="currentWorkout">
 						<div className="currentWorkoutContainer">
-							<h2>{this.state.timer}</h2>
+							<h2>{this.calculateRemainingWorkoutTime()}</h2>
 							<p>{this.state.currentWorkoutList[this.state.interval].name}</p>
 						</div>
 					</div>
@@ -292,6 +299,8 @@ class App extends React.Component {
 			return null;
 		}
 	}
+
+
 
 
 } // End of class App
