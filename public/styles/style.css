@@ -225,11 +225,11 @@ html {
     .workoutDisplay .listOfWorkout .readyBtn {
       border: none;
       outline: none;
-      font-size: 3.5rem;
+      font-size: 2.2rem;
       background: #44d1dc;
       margin: 0 auto;
       display: block;
-      padding: 10px 30px;
+      padding: 15px 40px;
       border-radius: 5px;
       margin-bottom: 75px;
       color: white;
